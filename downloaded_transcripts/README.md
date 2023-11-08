@@ -20,7 +20,7 @@ A step-by-step series of examples that tell you how to get a development environ
 
 1. **Clone the repository**
     ```sh
-    git clone https://github.com/labeveryday/youtube-analysis-assistant.git
+    git clone https://github.com/labeveryday/youtube-.git
     ```
 2. **Navigate to the project directory**
     ```sh
@@ -69,17 +69,32 @@ Once the application is running, you can interact with it through the Streamlit 
 
 - `app.py`: The main application script that contains the Streamlit UI and logic.
 - `requirements.txt`: A list of necessary Python packages.
-- `.env`: A file for storing environmental variables (OPENAI_API_KEY not included, you must [create your own](https://platform.openai.com)).
+- `.env`: A file for storing environmental variables (not included, you must create your own).
 
+## Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/yourusername/youtube-analysis-assistant/tags).
+
+## Authors
+
+* **Your Name** - *Initial work* - [YourUsername](https://github.com/YourUsername)
+
+See also the list of [contributors](https://github.com/yourusername/youtube-analysis-assistant/contributors) who participated in this project.
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-### About me
+## Acknowledgments
 
-My passions lie in Network Engineering, Cloud Computing, Automation, and impacting people's lives. I'm fortunate to weave all these elements together in my role as a Developer Advocate. On GitHub, I share my ongoing learning journey and the projects I'm building. Don't hesitate to reach out for a friendly hello or to ask any questions!
+- Hat tip to anyone whose code was used
+- Inspiration
+- etc
 
-My hangouts:
-- [LinkedIn](https://www.linkedin.com/in/duanlightfoot/)
-- [YouTube](https://www.youtube.com/@LabEveryday)
+---
+
+Remember to replace placeholders like `https://github.com/yourusername/youtube-analysis-assistant.git`, `your_openai_api_key_here`, and `Your Name` with the actual URL, your OpenAI API key, and your name. You may also want to include a section on how to run tests if your application has them.
