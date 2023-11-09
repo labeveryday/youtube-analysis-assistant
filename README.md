@@ -2,6 +2,8 @@
 
 Welcome to the YouTube Analysis Assistant, a tool designed to help you optimize and enhance your YouTube content using the power of language models. This assistant can suggest engaging titles, SEO tags, thumbnail designs, content enhancements, and segments with viral potential for your YouTube videos.
 
+![Screen copy](./img/screencopy.gif)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
