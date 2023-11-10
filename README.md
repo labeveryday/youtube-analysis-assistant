@@ -13,6 +13,7 @@ What things you need to install the software and how to install them:
 - Python 3.6+
 - Pip (Python package installer)
 - Virtual environment (optional but recommended)
+- An [OpenAI API Key](https://platform.openai.com/account/api-keys)
 
 ### Installation
 
