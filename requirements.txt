@@ -5,3 +5,4 @@ streamlit==1.28.1
 streamlit-chat==0.1.1
 youtube-transcript-api==0.6.1
 pytube==15.0.0
+urllib3==1.26.18

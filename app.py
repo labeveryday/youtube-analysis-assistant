@@ -56,8 +56,8 @@ def create_prompt(context):
     Returns:
         prompt (str):        The prompt template with the video transcript.
     """
-    questions = """Please assist with the following content optimization tasks: \
-    1. Engaging Title: Propose a catchy and appealing title that encapsulates the essence of the content.
+    questions = """
+    1. Engaging Title: Propose a catchy and appealing title that encapsulates the essence of the content. \
     2. SEO Tags: Identify a list of SEO-friendly tags that are relevant to the content and could improve its searchability. \
     3. Thumbnail Design: Describe the elements of an eye-catching thumbnail that would compel viewers to click. \
     4. Content Enhancement: Offer specific suggestions on how the content could be improved for viewer engagement and retention. \
@@ -65,16 +65,18 @@ def create_prompt(context):
     Provide the text section and explain why. \
     """
     prompt_template = PromptTemplate.from_template("""You are a expert content editor. \
-    Your task is to condense the given text into a concise 4-6 sentence summary as if you were preparing an introduction for a personal blog post. \
+    Your first task is to provide a concise 4-6 sentence summary of the given text as if you were preparing an introduction for a personal blog post. \
     Begin your summary with a phrase such as 'In this post' or 'In this interview,' setting the stage for what the reader can expect.
-    The after your summary, please provide your responses to the following inquiries in the form of bullet points:  \
+    Your second task is to provide your responses to the following inquiries in the form of bullet points:  \
     
     {context}
 
-    Inquiries: {question}
+    Provide Summary Here: 
+    
+    Answer Inquiries Here: {questions}
     """
     )
-    prompt = prompt_template.format(context=context, question=questions)
+    prompt = prompt_template.format(context=context, questions=questions)
     return prompt
 
 def convert_to_text_file(transcript):
@@ -114,22 +116,13 @@ def load_chain():
 # Contains the LLM and the memory
 chain = load_chain()
 
-def initialize_session_state():
-    """
-    Initializes the session state variables.
-    """
-    if "generated" not in st.session_state:
-        st.session_state["generated"] = []
-    if "previous" not in st.session_state:
-        st.session_state["previous"] = []
-    if "unique_id" not in st.session_state:
-        st.session_state["unique_id"] = str(randint(1000, 10000000))
-    if "chain" not in st.session_state:
-        st.session_state["chain"] = load_chain()
-    else:
-        st.session_state["chain"].memory.clear()
-
-initialize_session_state()
+# Creates session state variables
+if "generated" not in st.session_state:
+    st.session_state["generated"] = []
+if "previous" not in st.session_state:
+    st.session_state["previous"] = []
+if "unique_id" not in st.session_state:
+    st.session_state["unique_id"] = str(randint(1000, 10000000))
 
 # Sidebar to clear the chat
 st.sidebar.title("Sidebar")
@@ -142,7 +135,7 @@ if clear_button:
 
 # Gets video transcript from url
 url = st.sidebar.text_input("Insert YouTube URL", key=st.session_state["unique_id"])
-submitted_button = st.sidebar.button("Submit", key=st.session_state["unique_id"] + "submit")
+submitted_button = st.sidebar.button("Submit", key=st.session_state["unique_id"] + "submit")      
 
 # Container to display previous conversations
 response_container = st.container()
