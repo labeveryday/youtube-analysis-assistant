@@ -63,9 +63,12 @@ def create_prompt(context):
     4. Content Enhancement: Offer specific suggestions on how the content could be improved for viewer engagement and retention. \
     5. Viral Potential Segment: Identify the best section that might have the potential to be engaging or entertaining for a short-form viral video based on factors like humor, uniqueness, relatability, or other notable elements. \
     Provide the text section and explain why. \
+    6. Create an engaging LinkedIn post that would entice viewers to watch the video. \
+    7. Create an engaging Twitter post that would entice viewers to watch the video. \
+    8. Create a summary description of the video that would entice viewers to watch the video. \
     """
     prompt_template = PromptTemplate.from_template("""You are a expert content editor. \
-    Your first task is to provide a concise 4-6 sentence summary of the given text as if you were preparing an introduction for a personal blog post. \
+    Your first task is to provide a concise 4-6 sentence 6th grade reading level summary of the given text as if you were preparing an introduction for a personal blog post. \
     Begin your summary with a phrase such as 'In this post' or 'In this interview,' setting the stage for what the reader can expect.
     Your second task is to provide your responses to the following inquiries in the form of bullet points:  \
     
