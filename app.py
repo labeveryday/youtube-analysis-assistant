@@ -2,12 +2,16 @@
 YouTube Analysis Assistant
 """
 import os
+import re
 from random import randint
 from dotenv import load_dotenv
 
 # Used to display the UI components
 import streamlit as st
 from streamlit_chat import message
+
+import openai
+from PIL import Image
 
 # Used to conversation with LLM
 from langchain.prompts import PromptTemplate
@@ -20,7 +24,7 @@ from langchain.chat_models import ChatOpenAI
 load_dotenv()
 
 # Import openai api key
-OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
+openai.api_key=os.getenv("OPENAI_API_KEY")
 
 # Create title and header
 st.set_page_config(page_title="YouTube Analysis", page_icon="🤖", layout="wide")
@@ -63,8 +67,8 @@ def create_prompt(context):
     4. Content Enhancement: Offer specific suggestions on how the content could be improved for viewer engagement and retention. \
     5. Viral Potential Segment: Identify the best section that might have the potential to be engaging or entertaining for a short-form viral video based on factors like humor, uniqueness, relatability, or other notable elements. \
     Provide the text section and explain why. \
-    6. Create and provide an engaging LinkedIn post that would entice viewers to watch the video. \
-    7. Create and provide an engaging Twitter post that would entice viewers to watch the video. \
+    6. Create and provide an engaging viral LinkedIn post that would entice viewers to watch the video. \
+    7. Create and provide an engaging viral Twitter post that would entice viewers to watch the video. \
     8. Create and provide a summary description of the video that would entice viewers to watch the video. \
     """
     prompt_template = PromptTemplate.from_template("""You are a expert content editor. \
@@ -97,6 +101,24 @@ def convert_to_text_file(transcript):
         file.write(transcript)
     return file_path
 
+def generate_thumbnail(prompt):
+    """
+    Generates a thumbnail image based on a given prompt using the OpenAI DALL-E 3 model.
+
+    Args:
+    prompt (str): A text description of the image to be generated. This prompt is used by the AI model to understand what kind of image is requested.
+
+    Returns:
+    str: A URL pointing to the generated image. This URL can be used to view or download the image.
+    """
+    img_response = openai.Image.create(
+        model="dall-e-3",
+        prompt = prompt,
+        n=1,
+        size="1024x1024")
+    image_url = img_response['data'][0]['url']
+    return image_url
+
 
 @st.cache_resource
 def load_chain():
@@ -108,7 +130,7 @@ def load_chain():
     """
     llm = ChatOpenAI(
         model_name="gpt-4-1106-preview", 
-        openai_api_key=OPENAI_API_KEY,
+        openai_api_key=openai.api_key,
         temperature=0.9,
         verbose=True
     )
@@ -172,10 +194,10 @@ with container:
                 )
         # Creates a prompt from the video transcript and sends it to the LLM
         prompt = create_prompt(contents)
-        output = chain(prompt)["response"]
+        output = chain(prompt)["response"]    
         st.session_state["previous"].append("Video received. Currently reviewing...")
         st.session_state["generated"].append(output)
-    
+
     history = chain.memory.load_memory_variables({})["history"]
 
 # Displays the conversation history in the Streamlit app by iterating over previous and generated messages.
@@ -184,3 +206,15 @@ if st.session_state["previous"]:
         for i, (previous_message, generated_message) in enumerate(zip(st.session_state["previous"], st.session_state["generated"])):
             message(previous_message, is_user=True, key=f"{i}_user")
             message(generated_message, key=str(i))
+        # Regular expression to capture content between 'Thumbnail Design' and 'Content Enhancement'
+        pattern = r"Thumbnail Design:(.*?)Content Enhancement:"
+
+        # Search for the pattern in the text
+        match = re.search(pattern, output, re.DOTALL)
+
+        if match:
+            result = match.group(1).strip()
+            generated_thumbnail = generate_thumbnail(f"Create a {result}")
+            st.image(generated_thumbnail)
+        else:
+            print("No match found.")
