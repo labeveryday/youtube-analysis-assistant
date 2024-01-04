@@ -111,12 +111,14 @@ def generate_thumbnail(prompt):
     Returns:
     str: A URL pointing to the generated image. This URL can be used to view or download the image.
     """
-    img_response = openai.Image.create(
+    img_response = openai.images.generate(
         model="dall-e-3",
         prompt = prompt,
+        quality="hd",
         n=1,
+        #style="natural",
         size="1024x1024")
-    image_url = img_response['data'][0]['url']
+    image_url = img_response.data[0].url
     return image_url
 
 
@@ -131,7 +133,7 @@ def load_chain():
     llm = ChatOpenAI(
         model_name="gpt-4-1106-preview", 
         openai_api_key=openai.api_key,
-        temperature=0.9,
+        temperature=1,
         verbose=True
     )
     memory = ConversationBufferMemory()
