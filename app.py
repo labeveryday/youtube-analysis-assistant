@@ -47,7 +47,7 @@ def get_video_transcript(url: str) ->YoutubeLoader:
     # Loads the documents
     loaded_video_document = loader.load()
     # Returns the transcribed contents
-    return loaded_video_document[0].page_content
+    return loaded_video_document
 
 
 def create_prompt(context):
@@ -60,10 +60,18 @@ def create_prompt(context):
     Returns:
         prompt (str):        The prompt template with the video transcript.
     """
-    questions = """
+    thumbnail = """Create a vibrant and eye-catching imageg. \
+        It should feature a high-contrast color scheme with bright, bold colors. \
+        In the center, place a large, intriguing, and slightly exaggerated facial expression of a person looking surprised or excited, \
+        ensuring the emotion is highly visible and engaging. Include an element of mystery or curiosity, \
+        such as a blurred background image or an object that's partially visible, to spark viewers' interest. \
+        Ensure the text color contrasts well with the background for readability. \
+        Optionally, add a small, eye-catching icon or emoji in one corner to emphasize the video's theme, like a flame for something 'hot' or a laughing emoji for humor. \
+        The overall design should be clean, not too cluttered, but with enough visual elements to stand out and grab attention in a sea of other thumbnails."""
+    questions = f"""
     1. Engaging Title: Propose a catchy and appealing title that encapsulates the essence of the content. \
     2. SEO Tags: Identify a list of SEO-friendly tags that are relevant to the content and could improve its searchability. \
-    3. Thumbnail Design: Describe the elements of an eye-catching thumbnail that would compel viewers to click. \
+    3. Thumbnail Design: {thumbnail} \
     4. Content Enhancement: Offer specific suggestions on how the content could be improved for viewer engagement and retention. \
     5. Viral Potential Segment: Identify the best section that might have the potential to be engaging or entertaining for a short-form viral video based on factors like humor, uniqueness, relatability, or other notable elements. \
     Provide the text section and explain why. \
@@ -86,17 +94,21 @@ def create_prompt(context):
     prompt = prompt_template.format(context=context, questions=questions)
     return prompt
 
-def convert_to_text_file(transcript):
+def convert_to_text_file(content):
     """
     Converts the transcript to a text file and returns the file path.
 
     Args:
-        transcript (str):      The transcribed contents of the video.
+        content (str):          The transcribed contents of the video.
 
     Returns:
-        file_path (str):       The file path of the text file.
+        file_path (str):        The file path of the text file.
     """
-    file_path = './downloaded_transcripts/transcript.txt'
+    # Creates file name in video_id to published date format
+    file_name = content[0].metadata["source"] + f"-{content[0].metadata['publish_date'].split(' ')[0]}"
+    # Creates a transcript with the title of video as header
+    transcript = content[0].metadata["title"] + "\n\n" + content[0].page_content
+    file_path = f"./transcripts/{file_name}.txt"
     with open(file_path, 'w') as file:
         file.write(transcript)
     return file_path
